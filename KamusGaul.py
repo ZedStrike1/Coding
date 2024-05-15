@@ -6,7 +6,7 @@ meme_dict = {
     "CREEPY": "menakutkan, tidak menyenangkan",
     "AGGRO": "untuk menjadi agresif/marah"
             }
-            
+#tes update            
 word = input("Ketik kata yang tidak Kamu mengerti (gunakan huruf kapital semua!): ")     
 if word in meme_dict.keys():
     print(meme_dict[word])
