@@ -2,17 +2,6 @@ import discord
 from discord.ext import commands
 from botlogic import pass_gen
 
-class MyClient(discord.Client):
-    async def on_ready(self):
-        print(f'Logged in as {self.user} (ID: {self.user.id})')
-        print('------')
-
-    async def on_member_join(self, member):
-        guild = member.guild
-        if guild.system_channel is not None:
-            to_send = f'Welcome {member.mention} to {guild.name}!'
-            await guild.system_channel.send(to_send)
-
 intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
@@ -42,5 +31,12 @@ async def pangkat(ctx):
     message = await bot.wait_for("message", check=lambda m: m.author == ctx.author and m.channel == ctx.channel)
     await ctx.send(f'Pangkat 2 dari angka yang telah dimasukkan adalah {(int(message.content)**2)}')   
 
-client = MyClient(intents=intents)
-client.run('')
+@bot.event
+async def on_member_join(member):
+    guild = member.guild
+    if guild.system_channel is not None:
+        to_send = f'Welcome {member.mention} to {guild.name}!'
+        await guild.system_channel.send(to_send)
+
+bot.run('YOUR_BOT_TOKEN')
+
