@@ -1,6 +1,9 @@
 import discord
+import os
+import random
 from discord.ext import commands
 from botlogic import pass_gen
+
 
 intents = discord.Intents.default()
 intents.members = True
@@ -38,6 +41,14 @@ async def on_member_join(member):
         to_send = f'Welcome {member.mention} to {guild.name}!'
         await guild.system_channel.send(to_send)
 
+@bot.command()
+async def meme(ctx):
+    import random, os
+    img_name = random.choice(os.listdir('images'))
+    with open(f'images/{img_name}', 'rb') as f:
+        picture = discord.File(f)
+    await ctx.send(file=picture)    
+
 def get_duck_image_url():    
     import requests
     url = 'https://random-d.uk/api/random'
@@ -59,5 +70,28 @@ async def animals(ctx):
         picture = discord.File(f)
         await ctx.send(file=picture)
 
+daur_ulang = [
+    "Botol plastik", "Kaleng aluminium", "Kertas", "Karton", "Botol kaca",
+    "Kemasan makanan", "Sampah elektronik", "Kain bekas", "Botol deterjen",
+    "Barang pecah belah", "Barang dari baja", "Kantong belanja", "CD dan DVD bekas",
+    "Baterai", "Karet bekas", "Kayu bekas", "Lampu bekas", "Kardus bekas",
+    "Mainan bekas", "Pakaian bekas", "Tas plastik", "Ember plastik", "Papan reklame",
+    "Perabotan tua", "Kunci bekas", "Tali rafia", "Botol plastik", "Barang dari logam",
+    "Kaleng cat"
+]
+
+@bot.command()
+async def cek_sampah(ctx):
+    await ctx.send('Apa sampah yang anda mau periksa?')
+    message = await bot.wait_for('message', check=lambda m: m.author == ctx.author and m.channel == ctx.channel)
+    sampah = message.content.lower().strip()
+
+
+    for item in daur_ulang:
+        if sampah == item.lower().strip():
+            await ctx.send('Sampah tersebut haruslah di daur ulang, berikut tips untuk mendaur ulang!')
+            await ctx.send('https://arahenvironmental.com/7-tips-untuk-memulai-kebiasaan-daur-ulang-sampah-sendiri/')
+            return
+    await ctx.send('Sepertinya sampah itu tidak dapat anda daur ulang')   
 bot.run('YOUR_BOT_TOKEN')
 
